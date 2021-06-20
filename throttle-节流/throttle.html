@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>节流</title>
+</head>
+<body>
+<script>
+  //节流  N时间段内执行一次
+  function throttle(fn, wait) {
+    let _this;
+    let _args;
+    let last = 0;
+
+    return function() {
+      _this = this;
+      _args = arguments;
+      let now = +new Date();
+      if(now - last > wait) {
+        fn.apply(_this, _args);
+        last = now;
+      }
+    }
+  }
+
+  // 测试
+  let handler = throttle(() => {
+    console.log('width', window.innerWidth, 'height', window.innerHeight);
+  }, 1000); // 持续触发handler时，1秒执行一次传入的函数
+
+  window.addEventListener('resize', handler);
+</script>
+</body>
+</html>
