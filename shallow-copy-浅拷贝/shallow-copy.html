@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>浅拷贝</title>
+</head>
+<body>
+  <script>
+    let person = {
+      name: "Alan",
+      age: 24
+    }
+
+    // 浅拷贝方式1
+    function shallowCopy1(obj) {
+      return Object.assign({}, obj);
+    }
+    
+    // 浅拷贝方式2
+    function shallowCopy2(obj) {
+      return {...person};
+    }
+
+    // 浅拷贝方式3
+    function shallowCopy3(obj) {
+      if (typeof obj !== 'object') return null;
+      let copyObj = {};
+      for (const key in obj) {
+        if(Object.hasOwnProperty.call(obj, key)) {
+          copyObj[key] = obj[key];
+        }
+      }
+      return copyObj;
+    }
+
+    console.log(person);  // {name: "Alan", age: 24}
+    console.log(shallowCopy1(person)); // {name: "Alan", age: 24}
+    console.log(shallowCopy2(person)); // {name: "Alan", age: 24}
+    console.log(shallowCopy3(person)); // {name: "Alan", age: 24}
+  </script>
+</body>
+</html>
