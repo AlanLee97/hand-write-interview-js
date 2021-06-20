@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>防抖</title>
+</head>
+<body>
+<script>
+  // 延迟N时间段内只执行1次，重新触发时则重新执行
+  function debounce(fn, delay) {
+    let timer = null;
+    let _this;
+    let _args;
+    return function() {
+      _this = this;
+      _args = arguments;
+      clearTimeout(timer);
+      timer = setTimeout(() => {
+        fn.apply(_this, _args);
+      }, delay);
+    }
+  }
+
+  // 测试
+  let handler = debounce(function(e) {
+    console.log('width', window.innerWidth, 'height', window.innerHeight);
+  }, 1000);  // 持续改变窗口大小，触发resize事件，handler持续计算，窗口大小停止改变时，1秒后执行handler
+  
+  window.addEventListener('resize', handler);
+</script>
+</body>
+</html>
