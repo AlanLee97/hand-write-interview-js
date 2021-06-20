@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta eventName="viewport" content="width=device-width, initial-scale=1.0">
+  <title>事件总线</title>
+</head>
+<body>
+<script>
+  // 函数实现
+  function EventEmitter2() {
+    this.events = {};
+  }
+
+  EventEmitter2.prototype.on = function(eventName, fn) {
+    if(this.events[eventName]) {
+      this.events[eventName].push(fn);
+    }else {
+      this.events[eventName] = [fn];
+    }
+  }
+
+  EventEmitter2.prototype.off = function(eventName, fn) {
+    let fnArr = this.events[eventName].slice();
+    if(fnArr) {
+      let index = fnArr.findIndex(f => f === fn);
+      if (index !== -1) {
+        this.events[eventName].splice(index, 1);
+      }
+    }
+  }
+
+  EventEmitter2.prototype.emit = function(eventName, once = false, ...args) {
+    if(this.events[eventName]) {
+      let fnArr = this.events[eventName].slice();
+      for(let fn of fnArr) {
+        fn(...args);
+      }
+
+      if (once) {
+        delete this.events[eventName];
+      }
+    }
+  }
+
+  let evt = new EventEmitter2();
+  evt.on('hello', (data) => {
+    console.log('hello', data);
+  })
+
+  evt.emit('hello', false, 'AlanLee')
+
+
+
+</script>
+</body>
+</html>

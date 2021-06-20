@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta eventName="viewport" content="width=device-width, initial-scale=1.0">
+  <title>事件总线</title>
+</head>
+<body>
+<script>
+  // 类实现
+  class EventEmitter {
+    constructor() {
+      this.events = {};
+    }
+    on(eventName, fn) {
+      if(this.events[eventName]) {
+        this.events[eventName].push(fn);
+      } else {
+        this.events[eventName] = [fn];
+      }
+    }
+    off(eventName, fn) {
+      let tasks = this.events[eventName].slice();
+      if (tasks) {
+        const index = tasks.findIndex(f => f === fn || f.callback === fn);
+        if (index >= 0) {
+          this.events[eventName].splice(index, 1);
+        }
+      }
+    }
+    emit(eventName, once = false, ...args) {
+      if (this.events[eventName]) {
+        let _tasks = this.events[eventName].slice();
+        for(let fn of _tasks) {
+          fn(...args);
+        }
+        if (once) {
+          delete this.events[eventName];
+        }
+      }
+    }
+  }
+
+  let eventBus = new EventEmitter();
+
+  // 添加监听事件
+  eventBus.on('greet', fn);
+
+  eventBus.off('greet', fn);
+
+  // 添加监听事件
+  eventBus.on('greet', (data) => {
+    console.log('监听事件2', data);
+  });
+
+  // 触发事件
+  eventBus.emit('greet', false, 'AlanLee');
+
+  function fn(data) {
+    console.log('监听事件', data);
+  }
+
+</script>
+</body>
+</html>
